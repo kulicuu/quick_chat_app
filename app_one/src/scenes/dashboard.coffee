@@ -99,41 +99,71 @@ footer = ->
 
 
 lobby = ->
-    div
-        style:
-            width: '100%'
-            height: '100%'
-            display: 'flex'
-            flexDirection: 'column'
-            backgroundColor: 'linen'
-            justifyContent: 'center'
-            alignItems: 'center'
-        h3
+    if @state.login_pending is true
+        div
             style:
-                color: 'grey'
-                fontFamily: 'sans'
-            "Welcome to the Chat-Room."
-        h4
-            style:
-                color: 'grey'
-                fontFamily: 'sans'
-            "Please enter a username:"
-        input
-            type: 'text'
-            placeholder: 'username'
-            style:
-                fontSize: 14
-            onChange: (e) =>
-                username_candidate = e.currentTarget.value
-                @setState { username_candidate }
-                @props.check_is_username_avail { username_candidate }
+                width: '100%'
+                height: '100%'
+                display: 'flex'
+                flexDirection: 'column'
+                backgroundColor: 'linen'
+                justifyContent: 'center'
+                alignItems: 'center'
+            h4
+                style:
+                    color: 'grey'
+                    fontFamily: 'sans'
+                "Login pending... please be patient."
 
-            onKeyPress: (e) =>
-                if (e.key is 'Enter')
-                    @setState
-                        login_pending: true
-                    @props.initiate_login
-                        username_candidate: @state.username_candidate
+    else
+        div
+            style:
+                width: '100%'
+                height: '100%'
+                display: 'flex'
+                flexDirection: 'column'
+                backgroundColor: 'linen'
+                justifyContent: 'center'
+                alignItems: 'center'
+            h3
+                style:
+                    color: 'grey'
+                    fontFamily: 'sans'
+                "Welcome to the Chat-Room."
+            h4
+                style:
+                    color: 'grey'
+                    fontFamily: 'sans'
+                "Please enter a username:"
+            input
+                type: 'text'
+                placeholder: 'username'
+                style:
+                    fontSize: 14
+                onChange: (e) =>
+                    username_candidate = e.currentTarget.value
+                    @setState { username_candidate }
+                    @props.check_is_username_avail { username_candidate }
+
+                onKeyPress: (e) =>
+                    if (e.key is 'Enter')
+                        @setState
+                            login_pending: true
+                        @props.initiate_login
+                            username_candidate: @state.username_candidate
+
+            c @props.username_avail
+            if @props.username_avail isnt null
+                if @props.username_avail is true
+                    p
+                        style:
+                            color: 'limegreen'
+                        "OK"
+                else if @props.username_avail is false
+                    p
+                        style:
+                            color: 'orange'
+                        "Username taken"
 
 
 
@@ -163,11 +193,11 @@ comp = rr
     getInitialState: ->
         login_pending: false
         username_candidate: null
-        username: null
+
 
 
     render: ->
-        if @state.username is null
+        if @props.username is null
             lobby.bind(@)()
         else
             chat_room.bind(@)()
@@ -177,8 +207,10 @@ comp = rr
 
 
 
-map_state_to_props = (state) -> {}
-
+map_state_to_props = (state) ->
+    username: state.getIn ['lookup','username']
+    username_avail: state.getIn ['lookup', 'username_avail']
+    users_in_room: state.getIn ['lookup', 'users_in_room']
 
 map_dispatch_to_props = (dispatch) ->
 

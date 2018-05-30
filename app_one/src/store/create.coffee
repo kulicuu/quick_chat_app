@@ -10,7 +10,10 @@ thunk = require('redux-thunk').default
 initial_state = Imm.Map
     lookup: Imm.Map
         placeholder: 43
-        results: Imm.Map {}
+        username: null
+        username_avail: null
+        login_status_msg: null
+        users_in_room: Imm.List([])
 
 
 effects_q = [

@@ -5,7 +5,35 @@ bb = {}
 
 
 
+
+
+
+bb.a_user_logged_in = ({ state, payload }) ->
+    { username } = payload
+    state = state.set 'users_in_room', (state.get 'users_in_room').push(username)
+    state
+
+
+
+
+bb.res_initiate_login = ({ state, payload }) ->
+    { status, msg, username } = payload
+    if status is true
+        state = state.set 'login_status_msg', null
+        state = state.set 'username', username
+    else
+        state = state.set 'login_status_msg', msg
+    state
+
+bb.res_check_is_username_avail = ({ state, payload }) ->
+    c '3333'
+    { status } = payload
+    state = state.set 'username_avail', status
+    state
+
+
 keys_bb = _.keys bb
+
 
 
 server_msg_api = ({ type, payload, state, effects_q }) ->

@@ -24,7 +24,7 @@ a1.use express.static(public_dir)
 a1_server = http.createServer a1
 
 
-a1_primus = new Primus(a1_server, {transformer: 'websockets'})
+global.primus = a1_primus = new Primus(a1_server, {transformer: 'websockets'})
 a1_primus.save path.join(public_dir, '/js', '/primus.js')
 
 
