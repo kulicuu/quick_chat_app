@@ -14,8 +14,6 @@ bb.a_user_logged_in = ({ state, payload }) ->
     state
 
 
-
-
 bb.res_initiate_login = ({ state, payload }) ->
     { status, msg, username } = payload
     if status is true
@@ -25,8 +23,8 @@ bb.res_initiate_login = ({ state, payload }) ->
         state = state.set 'login_status_msg', msg
     state
 
+
 bb.res_check_is_username_avail = ({ state, payload }) ->
-    c '3333'
     { status } = payload
     state = state.set 'username_avail', status
     state
@@ -47,9 +45,21 @@ server_msg_api = ({ type, payload, state, effects_q }) ->
 aa = {}
 
 
-aa['primus:data'] = ({ state, action, effects_q }) ->
-    { type, payload } = action.payload.data
-    server_msg_api { type, payload, state, effects_q }
+construct_msg = ({ msg_candidate }) ->
+    local_id: shortid()
+    timestamp: Date.now()
+    msg_text: msg_candidate
+    confirmed: false
+
+
+
+aa.initiate_msg_send = ({ state, action, effects_q }) ->
+
+    state = state.set 'msg_roll', (state.get('msg_roll').push(Imm.Map(construct_msg({ msg_candidate}))))
+
+    effects_q.push
+        type: 'api_sc'
+        payload: action
 
 
 aa.api_sc = ({ state, action, effects_q }) ->
@@ -57,6 +67,11 @@ aa.api_sc = ({ state, action, effects_q }) ->
         type: 'api_sc'
         payload: action.payload
     state
+
+
+aa['primus:data'] = ({ state, action, effects_q }) ->
+    { type, payload } = action.payload.data
+    server_msg_api { type, payload, state, effects_q }
 
 
 keys_aa = _.keys aa

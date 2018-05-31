@@ -27,6 +27,12 @@ aa = {}
 
 
 
+aa.initiate_msg_send = ({ payload, spark }) ->
+    { msg_candidate } = payload
+
+
+
+
 aa.initiate_login = ({ payload, spark }) ->
     { username_candidate } = payload
     if (_.includes (_.keys users), username_candidate)

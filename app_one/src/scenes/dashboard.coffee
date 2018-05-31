@@ -32,6 +32,14 @@ users_in_room = ->
             width: '33%'
             height: '100%'
             backgroundColor: 'lightgreen'
+        # c @props.users_in_room
+        @props.users_in_room.toArray().map (user, idx) =>
+            p
+                key: "user_in_room:#{idx}"
+                style:
+                    marginLeft: 10
+                    fontSize: 11
+                user.toString()
 
 
 thread_roll = ->
@@ -40,8 +48,15 @@ thread_roll = ->
             display: 'flex'
             flexDirection: 'column'
             width: '100%'
-            backgroundColor: 'orange'
+            backgroundColor: 'black'
             height: '88%'
+
+        p
+            style:
+                fontSize: 11
+                marginLeft: 10
+                color: 'grey'
+            @state.pending_msg_content
 
 
 
@@ -61,8 +76,20 @@ msg_entry = ->
                 width: '80%'
                 height: '40%'
             placeholder: '...'
+            value: @state.msg_candidate
             type: 'text'
+            onChange: (e) =>
+                msg_candidate = e.currentTarget.value
+                @setState { msg_candidate }
 
+            onKeyPress: (e) =>
+                if (e.key is 'Enter')
+                    @setState
+                        msg_pending: true
+                        pending_msg_content: @state.msg_candidate
+                        msg_candidate: ""
+                    @props.initiate_msg_send
+                        msg_candidate: @state.msg_candidate
 
 
 thread_dash = ->
@@ -146,7 +173,7 @@ lobby = ->
                     @props.check_is_username_avail { username_candidate }
 
                 onKeyPress: (e) =>
-                    if (e.key is 'Enter')
+                    if (e.key is 'Enter') and (@props.username_avail is true)
                         @setState
                             login_pending: true
                         @props.initiate_login
@@ -193,6 +220,9 @@ comp = rr
     getInitialState: ->
         login_pending: false
         username_candidate: null
+        msg_candidate: ""
+        msg_pending: null
+        pending_msg_content: null
 
 
 
@@ -212,7 +242,13 @@ map_state_to_props = (state) ->
     username_avail: state.getIn ['lookup', 'username_avail']
     users_in_room: state.getIn ['lookup', 'users_in_room']
 
+
 map_dispatch_to_props = (dispatch) ->
+
+    initiate_msg_send: ({ msg_candidate }) ->
+        dispatch
+            type: 'initiate_msg_send'
+            payload: { msg_candidate }
 
     initiate_login: ({ username_candidate }) ->
         dispatch
