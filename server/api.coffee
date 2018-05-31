@@ -4,6 +4,7 @@ c = console.log.bind console
 color = require 'bash-color'
 _ = require 'lodash'
 fp = require 'lodash/fp'
+v4 = require('uuid/v4')
 
 
 
@@ -28,8 +29,14 @@ aa = {}
 
 
 aa.initiate_msg_send = ({ payload, spark }) ->
-    { msg_candidate } = payload
-
+    { msg_pack } = payload
+    c msg_pack, 'msg_pack'
+    msg_pack.confirmed = true
+    msg_pack.id = v4()
+    chatlog[msg_pack.id] = msg_pack
+    primus.write
+        type: 'new_msg_broadcast'
+        payload: { msg_pack }
 
 
 
@@ -55,7 +62,6 @@ aa.initiate_login = ({ payload, spark }) ->
                 status: true
                 msg: 'User successfully logged in.'
                 username: the_user.username
-
 
 
 aa.check_is_username_avail = ({ payload, spark }) ->

@@ -51,12 +51,16 @@ thread_roll = ->
             backgroundColor: 'black'
             height: '88%'
 
-        p
-            style:
-                fontSize: 11
-                marginLeft: 10
-                color: 'grey'
-            @state.pending_msg_content
+
+        @props.msg_roll.toArray().map (msg, idx) =>
+
+            p
+                key: "msg:#{idx}"
+                style:
+                    fontSize: 11
+                    marginLeft: 10
+                    color: 'grey'
+                msg.get 'msg_text'
 
 
 
@@ -85,8 +89,6 @@ msg_entry = ->
             onKeyPress: (e) =>
                 if (e.key is 'Enter')
                     @setState
-                        msg_pending: true
-                        pending_msg_content: @state.msg_candidate
                         msg_candidate: ""
                     @props.initiate_msg_send
                         msg_candidate: @state.msg_candidate
@@ -214,17 +216,14 @@ chat_room = ->
         footer.bind(@)()
 
 
-comp = rr
 
+
+comp = rr
 
     getInitialState: ->
         login_pending: false
         username_candidate: null
         msg_candidate: ""
-        msg_pending: null
-        pending_msg_content: null
-
-
 
     render: ->
         if @props.username is null
@@ -238,6 +237,7 @@ comp = rr
 
 
 map_state_to_props = (state) ->
+    msg_roll: state.getIn ['lookup', 'msg_roll']
     username: state.getIn ['lookup','username']
     username_avail: state.getIn ['lookup', 'username_avail']
     users_in_room: state.getIn ['lookup', 'users_in_room']

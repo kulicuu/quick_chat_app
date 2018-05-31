@@ -18,6 +18,7 @@
         "redux-immutable": "latest",
         "redux-thunk": "latest",
         "shortid": "latest",
+        "uuid": "latest",
         "ws": "latest"
     },
     "devDependencies": {},

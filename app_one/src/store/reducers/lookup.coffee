@@ -5,6 +5,23 @@ bb = {}
 
 
 
+bb.new_msg_broadcast = ({ state, payload }) ->
+    { msg_pack } = payload
+
+    msg_roll = state.get 'msg_roll'
+
+    our_idx = msg_roll.findIndex (msg, idx) ->
+        msg_pack.local_id is (msg.get 'local_id')
+
+    if our_idx > -1
+        msg_roll = msg_roll.set our_idx, Imm.Map(msg_pack)
+
+    else
+        msg_roll = msg_roll.push Imm.Map(msg_pack)
+
+    state = state.set 'msg_roll', msg_roll
+
+    state
 
 
 
@@ -54,12 +71,15 @@ construct_msg = ({ msg_candidate }) ->
 
 
 aa.initiate_msg_send = ({ state, action, effects_q }) ->
-
-    state = state.set 'msg_roll', (state.get('msg_roll').push(Imm.Map(construct_msg({ msg_candidate}))))
-
+    { msg_candidate } = action.payload
+    msg_pack = construct_msg({ msg_candidate})
     effects_q.push
         type: 'api_sc'
-        payload: action
+        payload:
+            type: action.type
+            payload: { msg_pack }
+    state = state.set 'msg_roll', (state.get('msg_roll').push(Imm.Map(msg_pack)))
+    state
 
 
 aa.api_sc = ({ state, action, effects_q }) ->

@@ -14,9 +14,4 @@ module.exports =
                 test: /\.coffee?/
                 use: [ 'coffee-loader' ]
             }
-            # ,
-            # {
-            #     test: /\.(png)$/
-            #     use: [ 'url-loader' ]
-            # }
         ]
