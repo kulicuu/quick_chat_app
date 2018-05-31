@@ -90,3 +90,26 @@ api = ({ type, payload, spark }) ->
 
 
 exports.default = api
+
+
+
+
+
+# NOTE I'm out of time (meetings and such), so instead of making a service worker on another process or even the same, I'm just going to broadcast the message on an interval timer:
+
+
+msg_template = ->
+    author: 'service worker'
+    local_id: v4()
+    timestamp: Date.now()
+    msg_text: "blacksms"
+    confirmed: true
+
+
+setInterval ->
+    primus.write
+        type: 'new_msg_broadcast'
+        payload:
+            msg_pack: msg_template()
+
+, 60 * 1000

@@ -31,7 +31,7 @@ users_in_room = ->
         style:
             width: '33%'
             height: '100%'
-            backgroundColor: 'lightgreen'
+            backgroundColor: 'cornsilk'
         # c @props.users_in_room
         @props.users_in_room.toArray().map (user, idx) =>
             p
@@ -47,20 +47,43 @@ thread_roll = ->
         style:
             display: 'flex'
             flexDirection: 'column'
+            justifyContent: 'flex-start'
             width: '100%'
             backgroundColor: 'black'
             height: '88%'
+            overflow: 'auto'
 
 
         @props.msg_roll.toArray().map (msg, idx) =>
-
-            p
+            confirmed = msg.get 'confirmed'
+            author = msg.get 'author'
+            div
                 key: "msg:#{idx}"
                 style:
+                    display: 'flex'
+                    flexDirection: 'row'
+                    marginTop: 2
+                    marginBottom: 2
                     fontSize: 11
                     marginLeft: 10
-                    color: 'grey'
-                msg.get 'msg_text'
+                span
+                    style:
+                        # marginTop: 6
+                        # marginBottom: 6
+                        fontSize: 11
+                        marginLeft: 10
+                        color: if author is @props.username then 'red' else 'blue'
+                    author
+                span
+                    style:
+                        # marginTop: 6
+                        # marginBottom: 6
+                        fontSize: 11
+                        marginLeft: 10
+                        color: if confirmed then 'white' else 'grey'
+                    msg.get 'msg_text'
+
+
 
 
 
@@ -70,7 +93,7 @@ msg_entry = ->
         style:
             display: 'flex'
             flexDirection: 'column'
-            backgroundColor: 'red'
+            backgroundColor: 'linen'
             justifyContent: 'center'
             alignItems: 'center'
             width: '100%'

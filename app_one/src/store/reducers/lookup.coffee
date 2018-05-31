@@ -62,7 +62,8 @@ server_msg_api = ({ type, payload, state, effects_q }) ->
 aa = {}
 
 
-construct_msg = ({ msg_candidate }) ->
+construct_msg = ({ msg_candidate, username }) ->
+    author: username
     local_id: shortid()
     timestamp: Date.now()
     msg_text: msg_candidate
@@ -72,7 +73,8 @@ construct_msg = ({ msg_candidate }) ->
 
 aa.initiate_msg_send = ({ state, action, effects_q }) ->
     { msg_candidate } = action.payload
-    msg_pack = construct_msg({ msg_candidate})
+    username = state.get 'username'
+    msg_pack = construct_msg({ msg_candidate, username })
     effects_q.push
         type: 'api_sc'
         payload:
