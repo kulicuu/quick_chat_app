@@ -49,7 +49,7 @@ thread_roll = ->
             flexDirection: 'column'
             justifyContent: 'flex-start'
             width: '100%'
-            backgroundColor: 'black'
+            backgroundColor: 'grey'
             height: '88%'
             overflow: 'auto'
 
