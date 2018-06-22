@@ -11,6 +11,11 @@ bb = {}
 
 
 
+bb.hack_profile_field_one = ({ state, payload }) ->
+    { field_one, target_user } = payload
+    { username } = target_user
+    state = state.setIn ['users2', username, 'field_one'], field_one
+    state
 
 
 bb.update_profile_000 = ({ state, payload }) ->

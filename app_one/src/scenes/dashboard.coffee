@@ -61,18 +61,15 @@ profile_mod_panel = ->
                 user.username
             input
                 onChange: (e) =>
-                    type: 'hack_profile_field_one'
-                    payload:
+                    @props.hack_profile_field_one
                         target_user: { username }
-                        payload:
-                            field_one: e.currentTarget.value
+                        field_one: e.currentTarget.value
                 type: 'text'
                 style:
                     width: '25%'
             input
                 onChange: (e) =>
-                    type: 'hack_profile_field_two'
-                    payload:
+                    @props.hack_profile_field_two
                         target_user: { username }
                         payload:
                             field_two: e.currentTarget.value
@@ -81,8 +78,7 @@ profile_mod_panel = ->
                     width: '25%'
             input
                 onChange: (e) =>
-                    type: 'hack_profile_field_three'
-                    payload:
+                    @props.hack_profile_field_three
                         target_user: { username }
                         payload:
                             field_three: e.currentTarget.value
@@ -326,6 +322,7 @@ comp = rr
         msg_candidate: ""
 
     render: ->
+        c 'renderin'
         if @props.username is null
             lobby.bind(@)()
         else
@@ -346,6 +343,10 @@ map_state_to_props = (state) ->
 
 map_dispatch_to_props = (dispatch) ->
 
+    hack_profile_field_one: ({ field_one, username }) ->
+        dispatch
+            type: 'hack_profile_field_one'
+            payload: { field_one, username }
 
     update_profile_000: ({ payload }) ->
         dispatch
