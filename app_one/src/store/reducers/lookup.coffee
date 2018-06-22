@@ -5,6 +5,20 @@ bb = {}
 
 
 
+
+
+
+
+
+
+
+
+bb.update_profile_000 = ({ state, payload }) ->
+    { profile_update_payload } = payload
+    # state = state.setIn
+    state
+
+
 bb.new_msg_broadcast = ({ state, payload }) ->
     { msg_pack } = payload
 
@@ -28,6 +42,13 @@ bb.new_msg_broadcast = ({ state, payload }) ->
 bb.a_user_logged_in = ({ state, payload }) ->
     { username } = payload
     state = state.set 'users_in_room', (state.get 'users_in_room').push(username)
+
+    users2 = state.get('users2').set username, Imm.Map
+        username: username
+        field_one: 'one'
+        field_two: 'two'
+        field_three: 'three'
+    state = state.set 'users2', users2
     state
 
 

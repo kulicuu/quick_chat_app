@@ -15,7 +15,7 @@ initial_state = Imm.Map
         login_status_msg: null
         users_in_room: Imm.List([])
         msg_roll: Imm.List([])
-
+        users2: Imm.Map({})
 
 effects_q = [
     {

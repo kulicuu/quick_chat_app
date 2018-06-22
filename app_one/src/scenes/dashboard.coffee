@@ -42,6 +42,71 @@ users_in_room = ->
                 user.toString()
 
 
+
+profile_mod_panel = ->
+
+    rayy = []
+    @props.users2.map (user, idx) =>
+        # c user, 'user93939393'
+
+        rayy.push (div
+            key: "user_hack#{idx}"
+            style:
+                display: 'flex'
+                flexDirection: 'row'
+            span
+                style:
+                    fontSize: 17
+                    fontFamily: 'courier'
+                user.username
+            input
+                onChange: (e) =>
+                    type: 'hack_profile_field_one'
+                    payload:
+                        target_user: { username }
+                        payload:
+                            field_one: e.currentTarget.value
+                type: 'text'
+                style:
+                    width: '25%'
+            input
+                onChange: (e) =>
+                    type: 'hack_profile_field_two'
+                    payload:
+                        target_user: { username }
+                        payload:
+                            field_two: e.currentTarget.value
+                type: 'text'
+                style:
+                    width: '25%'
+            input
+                onChange: (e) =>
+                    type: 'hack_profile_field_three'
+                    payload:
+                        target_user: { username }
+                        payload:
+                            field_three: e.currentTarget.value
+                type: 'text'
+                style:
+                    width: '25%')
+
+    div
+        style:
+            display: 'flex'
+            backgroundColor: 'grey'
+            width: 200
+            height: '100%'
+            # width: '100%'
+            flexDirection: 'column'
+
+
+
+        rayy
+
+
+
+
+
 thread_roll = ->
     div
         style:
@@ -49,8 +114,9 @@ thread_roll = ->
             flexDirection: 'column'
             justifyContent: 'flex-start'
             width: '100%'
-            backgroundColor: 'grey'
-            height: '88%'
+            backgroundColor: 'black'
+            # height: '88%'
+            height: '100%'
             overflow: 'auto'
 
 
@@ -85,6 +151,16 @@ thread_roll = ->
 
 
 
+main_split_panel = ->
+    div
+        style:
+            height: '88%'
+            width: '100%'
+            display: 'flex'
+            flexDirection: 'row'
+            backgroundColor: 'cyan'
+        thread_roll.bind(@)()
+        profile_mod_panel.bind(@)()
 
 
 
@@ -93,7 +169,7 @@ msg_entry = ->
         style:
             display: 'flex'
             flexDirection: 'column'
-            backgroundColor: 'linen'
+            backgroundColor: 'black'
             justifyContent: 'center'
             alignItems: 'center'
             width: '100%'
@@ -125,7 +201,8 @@ thread_dash = ->
             backgroundColor: 'lightslategrey'
             display: 'flex'
             flexDirection: 'column'
-        thread_roll.bind(@)()
+        # thread_roll.bind(@)()
+        main_split_panel.bind(@)()
         msg_entry.bind(@)()
 
 
@@ -264,9 +341,16 @@ map_state_to_props = (state) ->
     username: state.getIn ['lookup','username']
     username_avail: state.getIn ['lookup', 'username_avail']
     users_in_room: state.getIn ['lookup', 'users_in_room']
+    users2: state.getIn ['lookup', 'users2']
 
 
 map_dispatch_to_props = (dispatch) ->
+
+
+    update_profile_000: ({ payload }) ->
+        dispatch
+            type: 'update_profile_000'
+            payload: { profile_update_payload }
 
     initiate_msg_send: ({ msg_candidate }) ->
         dispatch
