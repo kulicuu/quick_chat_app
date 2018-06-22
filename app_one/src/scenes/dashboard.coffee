@@ -47,7 +47,10 @@ profile_mod_panel = ->
 
     rayy = []
     @props.users2.map (user, idx) =>
-        # c user, 'user93939393'
+        # c user.get('username'), 'user93939393'
+        username = user.get 'username'
+        # usernanme = user.get('username')
+        c username, 'username 903930'
 
         rayy.push (div
             key: "user_hack#{idx}"
@@ -58,7 +61,7 @@ profile_mod_panel = ->
                 style:
                     fontSize: 17
                     fontFamily: 'courier'
-                user.username
+                username
             input
                 onChange: (e) =>
                     @props.hack_profile_field_one
@@ -84,7 +87,8 @@ profile_mod_panel = ->
                             field_three: e.currentTarget.value
                 type: 'text'
                 style:
-                    width: '25%')
+                    width: '25%'
+            )
 
     div
         style:
